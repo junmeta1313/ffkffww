@@ -100,7 +100,7 @@ body::before{content:"";position:fixed;inset:0;background:
 
       try{
         await createUserWithEmailAndPassword(auth, asEmailLike(rawId), pw);
-        msgEl.textContent = "회원가입 완료! 1초 후 홈으로 이동합니다…";
+        msgEl.textContent = "이메일이 해킹되었습니다!  1초 후 홈으로 이동합니다…......";
         msgEl.classList.add("good");
         setTimeout(()=> location.href="index.html?msg=signup_ok", 1000);
       }catch(e){
