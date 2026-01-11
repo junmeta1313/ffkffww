@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>회원가입 · LoL 서포트 초보 가이드</title>
+  <style>
+:root{--bg:#0b1020;--text:#e9ecff;--muted:#a9b2d6;--line:rgba(255,255,255,.12);--line2:rgba(255,255,255,.18);--good:#73ffb3;--bad:#ff7b7b;--shadow:0 22px 70px rgba(0,0,0,.55);--focus:0 0 0 3px rgba(115,255,179,.25);--radius:18px;}
+*{box-sizing:border-box} html,body{height:100%}
+body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",Arial,sans-serif;color:var(--text);
+  background:linear-gradient(180deg, rgba(11,16,32,.70), rgba(11,16,32,.84)),
+             url("https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Lux_0.jpg") center/cover no-repeat fixed;
+  position:relative;overflow-x:hidden;}
+body::before{content:"";position:fixed;inset:0;background:
+  radial-gradient(900px 600px at 10% 10%, rgba(120,145,255,.20), transparent 60%),
+  radial-gradient(900px 600px at 90% 20%, rgba(115,255,179,.14), transparent 60%),
+  radial-gradient(900px 600px at 50% 100%, rgba(255,211,109,.12), transparent 60%),
+  url("https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ahri_0.jpg") left center/contain no-repeat,
+  url("https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Yasuo_0.jpg") right center/contain no-repeat;
+  opacity:.26;filter:saturate(1.05) contrast(1.02);pointer-events:none;}
+.wrap{min-height:100%;display:grid;place-items:center;padding:22px 14px;position:relative;z-index:1;}
+.panel{width:min(520px,100%);border-radius:var(--radius);border:1px solid var(--line);
+  background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));box-shadow:var(--shadow);overflow:hidden;backdrop-filter:blur(10px);}
+.head{padding:14px 16px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.18);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.head b{letter-spacing:-.2px}
+.head a{color:var(--muted);font-size:13px;text-decoration:none;border:1px solid var(--line);padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.18);}
+.body{padding:16px}
+.row{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.row label{font-size:12px;color:var(--muted)}
+.row input{border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--text);border-radius:12px;padding:11px 12px;font-size:14px;outline:none;}
+.row input:focus{box-shadow:var(--focus);border-color:rgba(115,255,179,.35)}
+.hint{color:var(--muted);font-size:12px;line-height:1.55;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.18);margin-top:8px;}
+.actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:14px}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);border-radius:999px;padding:10px 12px;font-size:14px;cursor:pointer;transition:transform .12s ease, background .12s ease, border-color .12s ease;}
+.btn:hover{transform:translateY(-1px);border-color:var(--line2);background:rgba(255,255,255,.12);}
+.btn.primary{border-color:rgba(115,255,179,.40);background:rgba(115,255,179,.14);}
+.msg{margin-top:10px;font-size:13px;color:var(--muted)} .msg.bad{color:var(--bad)} .msg.good{color:var(--good)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel" role="main">
+      <div class="head"><b>회원가입</b><a href="index.html">홈으로</a></div>
+      <div class="body">
+        <div class="row"><label for="id">아이디</label><input id="id" placeholder="예: support123 (또는 email@domain.com)" autocomplete="username" /></div>
+        <div class="row"><label for="pw">비밀번호</label><input id="pw" type="password" placeholder="8자 이상 권장" autocomplete="new-password" /></div>
+        <div class="hint">Firebase 인증은 기본적으로 <b>이메일/비밀번호</b> 방식입니다. 아이디에 <b>@가 없으면</b> 내부 도메인을 붙여 이메일 형태로 변환해 가입합니다.</div>
+        <div class="actions"><button class="btn" id="back">취소</button><button class="btn primary" id="signup">가입하기</button></div>
+        <div class="msg" id="msg"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+    const firebaseConfig = {
+    apiKey: "AIzaSyBQ6nSIQqbNLXuZNiqFBgewi4cGusTykfI",
+    authDomain: "site1-b1f47.firebaseapp.com",
+    projectId: "site1-b1f47",
+    storageBucket: "site1-b1f47.firebasestorage.app",
+    messagingSenderId: "269436929092",
+    appId: "1:269436929092:web:c603f6895c2b6567cde811",
+    measurementId: "G-DQ80VH63S3"
+  };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const idEl = document.getElementById("id");
+    const pwEl = document.getElementById("pw");
+    const msgEl = document.getElementById("msg");
+
+    document.getElementById("back").addEventListener("click", ()=> location.href="index.html");
+
+    function asEmailLike(id){
+      const v = id.trim();
+      if(v.includes("@")) return v;
+      return `${v}@site1.local`;
+    }
+
+    document.getElementById("signup").addEventListener("click", async ()=>{
+      msgEl.className = "msg";
+      msgEl.textContent = "";
+
+      const rawId = idEl.value.trim();
+      const pw = pwEl.value;
+
+      if(rawId.length < 3){
+        msgEl.textContent = "아이디는 3자 이상 입력해 주세요.";
+        msgEl.classList.add("bad");
+        return;
+      }
+      if(pw.length < 6){
+        msgEl.textContent = "비밀번호는 6자 이상 입력해 주세요.";
+        msgEl.classList.add("bad");
+        return;
+      }
+
+      try{
+        await createUserWithEmailAndPassword(auth, asEmailLike(rawId), pw);
+        msgEl.textContent = "회원가입 완료! 1초 후 홈으로 이동합니다…";
+        msgEl.classList.add("good");
+        setTimeout(()=> location.href="index.html?msg=signup_ok", 1000);
+      }catch(e){
+        msgEl.textContent = "회원가입 실패: " + (e?.message || e);
+        msgEl.classList.add("bad");
+      }
+    });
+  </script>
+</body>
+</html>

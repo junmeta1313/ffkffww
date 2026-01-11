@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LoL 서포트 초보 가이드 (대표 빌드/스킬 선마 10명)</title>
+  <style>
+    :root{--bg:#0b1020;--text:#e9ecff;--muted:#a9b2d6;--muted2:#7f89b7;--line:rgba(255,255,255,.10);--line2:rgba(255,255,255,.16);--good:#73ffb3;--warn:#ffd36d;--bad:#ff7b7b;--chip:rgba(255,255,255,.08);--shadow:0 10px 30px rgba(0,0,0,.35);--radius:16px;--radius2:12px;--focus:0 0 0 3px rgba(115,255,179,.25);}
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",Arial,sans-serif;
+      background:radial-gradient(1200px 900px at 20% -10%, rgba(120,145,255,.22), transparent 55%),
+               radial-gradient(900px 700px at 90% 20%, rgba(115,255,179,.14), transparent 52%),
+               radial-gradient(900px 700px at 40% 110%, rgba(255,211,109,.12), transparent 55%), var(--bg);
+      color:var(--text);}
+    a{color:inherit;text-decoration:none}
+    reminding{display:none}
+    .wrap{max-width:1200px;margin:0 auto;padding:18px 16px 34px;}
+    .topbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px;}
+    .brand{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);box-shadow:0 6px 18px rgba(0,0,0,.18);backdrop-filter:blur(8px);}
+    .dot{width:10px;height:10px;border-radius:999px;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(255,255,255,.1)), rgba(115,255,179,.65);box-shadow:0 0 0 3px rgba(115,255,179,.12);}
+    .brand b{letter-spacing:-.2px} .brand .mini{color:var(--muted2);font-size:12px;margin-left:4px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end;}
+    .btn{border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);border-radius:999px;padding:9px 12px;font-size:13px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.18);backdrop-filter:blur(8px);transition:transform .12s ease, background .12s ease, border-color .12s ease;display:inline-flex;align-items:center;gap:8px;user-select:none;}
+    .btn:hover{transform:translateY(-1px);border-color:var(--line2);background:rgba(255,255,255,.10);} .btn:focus-visible{outline:none;box-shadow:var(--focus);}
+    .btn.primary{border-color:rgba(115,255,179,.40);background:rgba(115,255,179,.12);} .btn.danger{border-color:rgba(255,123,123,.35);background:rgba(255,123,123,.10);}
+    .userBadge{border:1px solid var(--line);background:rgba(0,0,0,.22);border-radius:999px;padding:9px 12px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(0,0,0,.18);backdrop-filter:blur(8px);}
+    .userBadge b{color:var(--text)}
+    header{display:flex;flex-wrap:wrap;gap:12px 14px;align-items:flex-end;justify-content:space-between;margin-bottom:14px;}
+    h1{font-size:20px;margin:0;letter-spacing:-.2px;} .subtitle{margin:0;color:var(--muted);font-size:13px;line-height:1.45;}
+    .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:flex-end;}
+    .control{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:999px;padding:8px 10px;box-shadow:0 6px 18px rgba(0,0,0,.18);backdrop-filter:blur(8px);}
+    .control label{font-size:12px;color:var(--muted);white-space:nowrap}
+    .control input[type="search"]{width:min(320px,56vw);background:transparent;border:0;outline:none;color:var(--text);font-size:13px;}
+    .control select{background:transparent;border:0;outline:none;color:var(--text);font-size:13px;appearance:none;-webkit-appearance:none;padding-right:14px;cursor:pointer;}
+    .control .chev{width:8px;height:8px;border-right:2px solid var(--muted2);border-bottom:2px solid var(--muted2);transform:rotate(45deg);margin-left:-10px;pointer-events:none;}
+    .main{display:grid;grid-template-columns:1.02fr 1.18fr;gap:14px;align-items:start;}
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+    .listHead{padding:14px 14px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.15);}
+    .listHead .count{color:var(--muted);font-size:12px;} .hint{color:var(--muted2);font-size:12px;}
+    .grid{display:grid;grid-template-columns:1fr;gap:10px;padding:12px;}
+    .card{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:var(--radius2);background:rgba(0,0,0,.18);cursor:pointer;transition:transform .12s ease, border-color .12s ease, background .12s ease;outline:none;}
+    .card:hover{transform:translateY(-1px);border-color:var(--line2);background:rgba(0,0,0,.24);} .card:focus-visible{box-shadow:var(--focus);}
+    .avatar{width:44px;height:44px;border-radius:12px;flex:0 0 auto;border:1px solid var(--line2);box-shadow:0 10px 18px rgba(0,0,0,.25);background:rgba(255,255,255,.04);overflow:hidden;}
+    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+    .meta{flex:1 1 auto;min-width:0;}
+    .nameRow{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+    .name{font-weight:750;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+    .tag{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid var(--line);background:var(--chip);color:var(--muted);}
+    .stats{margin-top:8px;display:flex;flex-wrap:wrap;gap:10px 14px;color:var(--muted);font-size:12px;}
+    .stat b{color:var(--text);font-weight:700}
+    .mini{color:var(--muted2);font-size:12px;white-space:nowrap;}
+    .detailWrap{padding:14px;}
+    .detailTop{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid var(--line);}
+    .detailLeft{display:flex;gap:12px;align-items:center;min-width:0;}
+    .bigAvatar{width:56px;height:56px;border-radius:16px;border:1px solid var(--line2);overflow:hidden;box-shadow:0 14px 26px rgba(0,0,0,.3);background:rgba(255,255,255,.04);flex:0 0 auto;}
+    .bigAvatar img{width:100%;height:100%;object-fit:cover;display:block}
+    .detailTitle{min-width:0}
+    .detailTitle h2{margin:0;font-size:18px;letter-spacing:-.2px}
+    .detailTitle p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.4}
+    .pillRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
+    .pill{border:1px solid var(--line);background:rgba(255,255,255,.06);border-radius:999px;padding:6px 10px;font-size:12px;color:var(--muted);white-space:nowrap;}
+    .pill b{color:var(--text)} .pill.good b{color:var(--good)} .pill.warn b{color:var(--warn)} .pill.bad b{color:var(--bad)}
+    .section{margin-top:12px;border:1px solid var(--line);border-radius:var(--radius2);background:rgba(0,0,0,.16);overflow:hidden;}
+    .sectionHead{padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.04);}
+    .sectionHead .h{font-weight:750;letter-spacing:-.2px;} .sectionHead .sub{color:var(--muted2);font-size:12px;}
+    .sectionBody{padding:12px;}
+    .buildRow{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center;justify-content:space-between;padding:10px 10px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.03);margin-bottom:10px;}
+    .buildRow:last-child{margin-bottom:0}
+    .buildLeft{display:flex;flex-direction:column;gap:6px;min-width:min(360px,100%);} .buildLabel{font-size:12px;color:var(--muted);}
+    .items{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+    .item{display:flex;gap:8px;align-items:center;border:1px solid var(--line);background:rgba(0,0,0,.14);border-radius:12px;padding:6px 8px;max-width:100%;}
+    .item img{width:28px;height:28px;border-radius:8px;border:1px solid var(--line2);background:rgba(255,255,255,.04);object-fit:cover;flex:0 0 auto;}
+    .item .t{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px;}
+    .buildRight{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;color:var(--muted);font-size:12px;}
+    .metric{border:1px solid var(--line);background:rgba(0,0,0,.14);border-radius:999px;padding:6px 10px;white-space:nowrap;}
+    .metric .w{color:var(--good);font-weight:800} .metric .p{color:var(--warn);font-weight:800}
+    .skillTop{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;justify-content:space-between;margin-bottom:10px;}
+    .skillLine{color:var(--muted);font-size:13px;line-height:1.45}
+    .prio{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+    .bubble{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;border:1px solid var(--line2);background:rgba(0,0,0,.18);font-weight:900;letter-spacing:.3px;}
+    .bubble.q{color:#9ad2ff} .bubble.w{color:#b8ffcb} .bubble.e{color:#ffd8a8} .bubble.r{color:#ffb1b1}
+    .arrow{color:var(--muted2)}
+    .levels{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:8px;}
+    .lvl{border:1px solid var(--line);background:rgba(0,0,0,.14);border-radius:12px;padding:8px 6px;display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center;min-height:56px;}
+    .lvl .n{font-size:11px;color:var(--muted2)}
+    .lvl .s{width:30px;height:30px;border-radius:999px;display:grid;place-items:center;font-weight:900;border:1px solid var(--line2);background:rgba(255,255,255,.04);}
+    .lvl .s.q{color:#9ad2ff} .lvl .s.w{color:#b8ffcb} .lvl .s.e{color:#ffd8a8} .lvl .s.r{color:#ffb1b1}
+    .emptyState{padding:18px;color:var(--muted);line-height:1.55;}
+    .footerNote{margin-top:12px;color:var(--muted2);font-size:12px;line-height:1.55;padding:12px 14px;border-top:1px solid var(--line);background:rgba(0,0,0,.10);}
+    @media (max-width:980px){.main{grid-template-columns:1fr;} .control input[type="search"]{width:min(520px,70vw)} .levels{grid-template-columns:repeat(6,minmax(0,1fr));}}
+    @media (max-width:560px){.wrap{padding:16px 12px 26px;} .control{width:100%;justify-content:space-between;} .control input[type="search"]{width:62vw;} .levels{grid-template-columns:repeat(4,minmax(0,1fr));} .item .t{max-width:170px;}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand"><span class="dot"></span><b>서포트 초보 대시보드</b><span class="mini">Firebase Auth</span></div>
+      <div class="actions">
+        <div class="userBadge" id="userBadge">상태: <b>로그아웃</b></div>
+        <a class="btn" id="goSignup" href="signup.html">회원가입</a>
+        <a class="btn primary" id="goLogin" href="login.html">로그인</a>
+        <button class="btn danger" id="btnLogout" style="display:none;">로그아웃</button>
+      </div>
+    </div>
+
+    <header>
+      <div>
+        <h1>서포트 랭크 초보 가이드 · 대표 빌드/스킬 선마 10명</h1>
+        <p class="subtitle">아이콘/유튜브는 인터넷이 필요합니다.</p>
+      </div>
+      <div class="controls">
+        <div class="control"><label>검색</label><input id="q" type="search" placeholder="예: 나미, 쓰레쉬, Pyke…" autocomplete="off" /></div>
+        <div class="control"><label>필터</label>
+          <select id="filter">
+            <option value="all">전체</option><option value="enchanter">엔챈터</option><option value="engage">이니시/탱</option>
+            <option value="pick">훅/픽</option><option value="roam">로밍</option><option value="assassin">암살</option>
+          </select><span class="chev"></span>
+        </div>
+        <div class="control"><label>정렬</label>
+          <select id="sortKey"><option value="pickRate">픽률</option><option value="winRate">승률</option><option value="nameKr">이름</option></select><span class="chev"></span>
+        </div>
+        <div class="control"><label>방향</label>
+          <select id="sortDir"><option value="desc">내림차순</option><option value="asc">오름차순</option></select><span class="chev"></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="main">
+      <section class="panel">
+        <div class="listHead"><div class="count" id="count">—</div><div class="hint">카드 선택 후 ↑/↓ 이동</div></div>
+        <div class="grid" id="list"></div>
+        <div class="footerNote">오프라인: 검색/정렬/텍스트 OK · 아이콘/유튜브는 인터넷 필요</div>
+      </section>
+      <section class="panel"><div class="detailWrap" id="detail"><div class="emptyState">왼쪽에서 챔피언을 선택해 주세요.</div></div></section>
+    </div>
+  </div>
+
+  <script>
+    const ICONS = {
+      "Dream Maker":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3870.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Celestial Opposition":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3869.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Bloodsong":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3877.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Ionian Boots of Lucidity":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3158.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Boots of Swiftness":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3009.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Plated Steelcaps":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3047.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Mercury's Treads":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3111.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Imperial Mandate":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/4005.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Moonstone Renewer":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/6617.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Redemption":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3107.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Dawncore":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/6621.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Ardent Censer":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3504.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Bandlepipes":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/2524.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Locket of the Iron Solari":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3190.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Knight's Vow":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3109.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Umbral Glaive":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3179.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Youmuu's Ghostblade":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3142.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Edge of Night":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3814.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Dead Man's Plate":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3742.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Protoplasm Harness":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/2525.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64",
+      "Zeke's Convergence":"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/item/3050.png?image=q_auto%3Agood%2Cf_png%2Cw_64%2Ch_64"
+    };
+    const CHAMPIONS = [
+      {key:"nami",nameKr:"나미",nameEn:"Nami",style:["enchanter"],icon:"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/champion/Nami.png?image=c_crop%2Ch_103%2Cw_103%2Cx_9%2Cy_9%2Fq_auto%3Agood%2Cf_png%2Cw_160%2Ch_160",winRate:52.27,pickRate:15.15,
+        build:{support:{name:"Dream Maker",pick:70.36,win:52.59},boots:{name:"Ionian Boots of Lucidity",pick:91.72,win:52.78},core:{items:["Imperial Mandate","Moonstone Renewer","Redemption"],pick:9.79,win:59.54}},
+        skills:{prio:["W","E","Q"],seq15:"W E Q W W R W E W E R E E Q Q",pick:67.15,win:66.51},
+        note:"힐/버프/CC가 골고루. 라인전이 편하고 한타 기여도가 안정적."
+      },
+      {key:"karma",nameKr:"카르마",nameEn:"Karma",style:["enchanter"],icon:"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/champion/Karma.png?image=c_crop%2Ch_103%2Cw_103%2Cx_9%2Cy_9%2Fq_auto%3Agood%2Cf_png%2Cw_160%2Ch_160",winRate:49.86,pickRate:12.13,
+        build:{support:{name:"Dream Maker",pick:71.42,win:51.00},boots:{name:"Ionian Boots of Lucidity",pick:95.56,win:50.60},core:{items:["Moonstone Renewer","Redemption","Dawncore"],pick:11.01,win:56.18}},
+        skills:{prio:["Q","E","W"],seq15:"Q E W Q Q R Q E Q E R E E W W",pick:61.61,win:59.51},
+        note:"라인 압박(견제) + 실드로 팀파이트에서 존재감이 큼."
+      },
+      {key:"lulu",nameKr:"룰루",nameEn:"Lulu",style:["enchanter"],icon:"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/champion/Lulu.png?image=c_crop%2Ch_103%2Cw_103%2Cx_9%2Cy_9%2Fq_auto%3Agood%2Cf_png%2Cw_160%2Ch_160",winRate:49.89,pickRate:11.45,
+        build:{support:{name:"Dream Maker",pick:88.21,win:50.44},boots:{name:"Ionian Boots of Lucidity",pick:95.27,win:50.55},core:{items:["Ardent Censer","Moonstone Renewer","Redemption"],pick:8.79,win:61.00}},
+        skills:{prio:["E","Q","W"],seq15:"E Q W E E R E W E W R W W Q Q",pick:42.71,win:65.35},
+        note:"하이퍼캐리 보호에 특화(실드/폴리모프/궁)."
+      },
+      {key:"thresh",nameKr:"쓰레쉬",nameEn:"Thresh",style:["engage","pick"],icon:"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/champion/Thresh.png?image=c_crop%2Ch_103%2Cw_103%2Cx_9%2Cy_9%2Fq_auto%3Agood%2Cf_png%2Cw_160%2Ch_160",winRate:52.87,pickRate:10.90,
+        build:{support:{name:"Celestial Opposition",pick:54.24,win:51.21},boots:{name:"Boots of Swiftness",pick:55.42,win:53.81},core:{items:["Bandlepipes","Locket of the Iron Solari","Knight's Vow"],pick:7.81,win:62.21}},
+        skills:{prio:["Q","E","W"],seq15:"Q E W Q Q R Q E Q E R E E W W",pick:60.15,win:66.79},
+        note:"이니시/세이브 모두 가능. ‘랜턴’ 덕분에 실수 커버가 됨."
+      },
+      {key:"nautilus",nameKr:"노틸러스",nameEn:"Nautilus",style:["engage","pick"],icon:"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/champion/Nautilus.png?image=c_crop%2Ch_103%2Cw_103%2Cx_9%2Cy_9%2Fq_auto%3Agood%2Cf_png%2Cw_160%2Ch_160",winRate:51.24,pickRate:11.42,
+        build:{support:{name:"Celestial Opposition",pick:69.26,win:50.26},boots:{name:"Plated Steelcaps",pick:54.65,win:51.17},core:{items:["Bandlepipes","Locket of the Iron Solari","Knight's Vow"],pick:9.65,win:62.87}},
+        skills:{prio:["Q","W","E"],seq15:"Q W E Q Q R Q W Q W R W W E E",pick:72.85,win:68.88},
+        note:"초보에게 특히 쉬운 편(광범위 CC, 궁으로 확정 이니시)."
+      },
+      {key:"leona",nameKr:"레오나",nameEn:"Leona",style:["engage"],icon:"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/champion/Leona.png?image=c_crop%2Ch_103%2Cw_103%2Cx_9%2Cy_9%2Fq_auto%3Agood%2Cf_png%2Cw_160%2Ch_160",winRate:52.46,pickRate:6.71,
+        build:{support:{name:"Celestial Opposition",pick:54.60,win:49.81},boots:{name:"Plated Steelcaps",pick:52.42,win:52.62},core:{items:["Bandlepipes","Locket of the Iron Solari","Knight's Vow"],pick:6.82,win:70.00}},
+        skills:{prio:["W","E","Q"],seq15:"Q E W W W R W E W E R E E Q Q",pick:49.78,win:66.87},
+        note:"한 번 물면 강함. W 선마로 단단해져서 이니시 성공률이 올라감."
+      },
+      {key:"janna",nameKr:"잔나",nameEn:"Janna",style:["enchanter"],icon:"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/champion/Janna.png?image=c_crop%2Ch_103%2Cw_103%2Cx_9%2Cy_9%2Fq_auto%3Agood%2Cf_png%2Cw_160%2Ch_160",winRate:51.55,pickRate:7.10,
+        build:{support:{name:"Dream Maker",pick:78.72,win:52.06},boots:{name:"Boots of Swiftness",pick:77.70,win:51.97},core:{items:["Moonstone Renewer","Redemption","Dawncore"],pick:6.54,win:55.73}},
+        skills:{prio:["E","W","Q"],seq15:"W E Q E E R E W E W R W W Q Q",pick:16.01,win:65.71},
+        note:"상대 이니시를 끊는 데 강함. 팀을 살려서 이기는 타입."
+      },
+      {key:"pyke",nameKr:"파이크",nameEn:"Pyke",style:["assassin","pick"],icon:"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/champion/Pyke.png?image=c_crop%2Ch_103%2Cw_103%2Cx_9%2Cy_9%2Fq_auto%3Agood%2Cf_png%2Cw_160%2Ch_160",winRate:51.93,pickRate:6.73,
+        build:{support:{name:"Celestial Opposition",pick:58.37,win:52.74},boots:{name:"Boots of Swiftness",pick:64.60,win:51.78},core:{items:["Umbral Glaive","Youmuu's Ghostblade","Edge of Night"],pick:12.60,win:55.07}},
+        skills:{prio:["Q","E","W"],seq15:"Q E W Q Q R Q E Q E R E E W W",pick:88.91,win:62.99},
+        note:"궁으로 골드 분배 + 스노우볼. 시야 장악과 픽메이킹이 핵심."
+      },
+      {key:"bard",nameKr:"바드",nameEn:"Bard",style:["roam","pick"],icon:"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/champion/Bard.png?image=c_crop%2Ch_103%2Cw_103%2Cx_9%2Cy_9%2Fq_auto%3Agood%2Cf_png%2Cw_160%2Ch_160",winRate:50.89,pickRate:7.57,
+        build:{support:{name:"Bloodsong",pick:68.81,win:52.29},boots:{name:"Boots of Swiftness",pick:66.45,win:52.39},core:{items:["Dead Man's Plate","Bandlepipes","Protoplasm Harness"],pick:7.38,win:53.55}},
+        skills:{prio:["Q","W","E"],seq15:"Q W E Q Q R Q W Q W R W W E E",pick:79.69,win:64.76},
+        note:"로밍/변수 창출에 강함. 궁으로 한타/오브젝트를 바꿈."
+      },
+      {key:"blitzcrank",nameKr:"블리츠크랭크",nameEn:"Blitzcrank",style:["pick","engage"],icon:"https://opgg-static.akamaized.net/meta/images/lol/16.1.1/champion/Blitzcrank.png?image=c_crop%2Ch_103%2Cw_103%2Cx_9%2Cy_9%2Fq_auto%3Agood%2Cf_png%2Cw_160%2Ch_160",winRate:50.70,pickRate:5.26,
+        build:{support:{name:"Celestial Opposition",pick:61.74,win:49.74},boots:{name:"Boots of Swiftness",pick:81.86,win:52.55},core:{items:["Locket of the Iron Solari","Redemption","Zeke's Convergence"],pick:4.74,win:61.82}},
+        skills:{prio:["Q","E","W"],seq15:"Q E W Q Q R Q E Q E R E E W W",pick:81.66,win:62.77},
+        note:"한 번 끌면 게임이 바뀜. Q 적중률이 핵심."
+      }
+    ];
+    const STYLE_LABEL={enchanter:"엔챈터",engage:"이니시/탱",pick:"훅/픽",roam:"로밍",assassin:"암살"};
+    const $=(s)=>document.querySelector(s);
+    const listEl=$("#list"),detailEl=$("#detail"),countEl=$("#count");
+    const qEl=$("#q"),filterEl=$("#filter"),sortKeyEl=$("#sortKey"),sortDirEl=$("#sortDir");
+    let state={q:"",filter:"all",sortKey:"pickRate",sortDir:"desc",selectedKey:null,visible:[]};
+    function pct(n){return (Math.round(n*100)/100).toFixed(2)+"%";}
+    function gradeWin(n){if(n>=52.5)return"good"; if(n>=50.0)return"warn"; return"bad";}
+    function escapeHtml(str){return String(str).replace(/[&<>"']/g,(m)=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));}
+    function chipStyles(arr){return arr.map(s=>`<span class="tag">${STYLE_LABEL[s]||s}</span>`).join("");}
+    function itemPill(name){const src=ICONS[name]||""; const safe=escapeHtml(name); return `<div class="item"><img alt="${safe}" src="${src}" loading="lazy"><div class="t">${safe}</div></div>`;}
+    function parseSeq(s){return s.trim().split(/\s+/).filter(Boolean);}
+    function fillTo18(seq15,prio){const target={Q:5,W:5,E:5,R:3}; const seq=parseSeq(seq15); const count={Q:0,W:0,E:0,R:0}; for(const s of seq){if(count[s]!=null)count[s]++;} while(seq.length<18){if(count.R<target.R){seq.push("R");count.R++;continue;} let added=false; for(const s of prio){if(count[s]<target[s]){seq.push(s);count[s]++;added=true;break;}} if(!added){for(const s of ["Q","W","E"]){if(count[s]<target[s]){seq.push(s);count[s]++;added=true;break;}} if(!added)break;}} return seq;}
+    function youtubeTipsUrl(ch){return `https://www.youtube.com/results?search_query=${encodeURIComponent(ch.nameKr+" 서포터 꿀팁")}`;}
+    function renderList(){const arr=state.visible; listEl.innerHTML=arr.map(c=>{const selected=c.key===state.selectedKey; return `
+      <div class="card" tabindex="0" data-key="${c.key}" style="${selected?'border-color:rgba(115,255,179,.45);background:rgba(115,255,179,.08);':''}">
+        <div class="avatar"><img alt="${escapeHtml(c.nameKr)}" src="${c.icon}" loading="lazy"></div>
+        <div class="meta">
+          <div class="nameRow"><div class="name">${escapeHtml(c.nameKr)} <span class="mini">(${escapeHtml(c.nameEn)})</span></div></div>
+          <div class="tags">${chipStyles(c.style)}</div>
+          <div class="stats"><div class="stat">승률 <b>${pct(c.winRate)}</b></div><div class="stat">픽률 <b>${pct(c.pickRate)}</b></div></div>
+        </div>
+      </div>`;}).join("");
+      listEl.querySelectorAll(".card").forEach(card=>{
+        card.addEventListener("click",()=>select(card.dataset.key,true));
+        card.addEventListener("keydown",(e)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();select(card.dataset.key,true);}});
+      });
+    }
+    function select(key,focus){state.selectedKey=key; const c=state.visible.find(x=>x.key===key)||CHAMPIONS.find(x=>x.key===key); renderList(); renderDetail(c); if(focus){listEl.querySelector(`.card[data-key="${CSS.escape(key)}"]`)?.focus();}}
+    function renderDetail(c){
+      if(!c){detailEl.innerHTML=`<div class="emptyState">선택해 주세요.</div>`;return;}
+      const wCls=gradeWin(c.winRate);
+      const seq18=fillTo18(c.skills.seq15,c.skills.prio);
+      const prioHtml=c.skills.prio.map((s,i)=>`<span class="bubble ${s.toLowerCase()}">${s}</span>${i<c.skills.prio.length-1?'<span class="arrow">→</span>':''}`).join("");
+      const levelsHtml=seq18.map((s,i)=>`<div class="lvl"><div class="n">Lv ${i+1}</div><div class="s ${s.toLowerCase()}">${s}</div></div>`).join("");
+      const yt=youtubeTipsUrl(c);
+      detailEl.innerHTML=`
+        <div class="detailTop">
+          <div class="detailLeft">
+            <div class="bigAvatar"><img alt="${escapeHtml(c.nameKr)}" src="${c.icon}" loading="lazy"></div>
+            <div class="detailTitle"><h2>${escapeHtml(c.nameKr)} <span class="mini">(${escapeHtml(c.nameEn)})</span></h2><p>${escapeHtml(c.note)}</p></div>
+          </div>
+          <div class="pillRow">
+            <div class="pill ${wCls}">승률 <b>${pct(c.winRate)}</b></div>
+            <div class="pill">픽률 <b>${pct(c.pickRate)}</b></div>
+            <a class="btn primary" href="${escapeHtml(yt)}" target="_blank" rel="noreferrer">꿀팁영상 보기</a>
+          </div>
+        </div>
+        <div class="section">
+          <div class="sectionHead"><div class="h">추천 아이템 빌드</div><div class="sub">서폿 업그레이드 → 부츠 → 코어 3개</div></div>
+          <div class="sectionBody">
+            <div class="buildRow"><div class="buildLeft"><div class="buildLabel">① 서폿 업그레이드</div><div class="items">${itemPill(c.build.support.name)}</div></div>
+              <div class="buildRight"><div class="metric">픽률 <span class="p">${pct(c.build.support.pick)}</span></div><div class="metric">승률 <span class="w">${pct(c.build.support.win)}</span></div></div></div>
+            <div class="buildRow"><div class="buildLeft"><div class="buildLabel">② 부츠</div><div class="items">${itemPill(c.build.boots.name)}</div></div>
+              <div class="buildRight"><div class="metric">픽률 <span class="p">${pct(c.build.boots.pick)}</span></div><div class="metric">승률 <span class="w">${pct(c.build.boots.win)}</span></div></div></div>
+            <div class="buildRow"><div class="buildLeft"><div class="buildLabel">③ 코어 3개</div><div class="items">${c.build.core.items.map(itemPill).join("")}</div></div>
+              <div class="buildRight"><div class="metric">코어 픽률 <span class="p">${pct(c.build.core.pick)}</span></div><div class="metric">코어 승률 <span class="w">${pct(c.build.core.win)}</span></div></div></div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="sectionHead"><div class="h">스킬 선마/레벨업</div><div class="sub">그대로 따라 찍기</div></div>
+          <div class="sectionBody">
+            <div class="skillTop"><div class="prio"><span class="mini">선마:</span>${prioHtml}</div>
+              <div class="metric">픽률 <span class="p">${pct(c.skills.pick)}</span> · 승률 <span class="w">${pct(c.skills.win)}</span></div></div>
+            <div class="levels">${levelsHtml}</div>
+          </div>
+        </div>`;
+    }
+    function apply(){
+      const q=state.q.trim().toLowerCase();
+      let arr=CHAMPIONS.filter(c=>((c.nameKr+" "+c.nameEn).toLowerCase().includes(q)) && (state.filter==="all"||c.style.includes(state.filter)));
+      const key=state.sortKey, dir=state.sortDir==="asc"?1:-1;
+      arr.sort((a,b)=> key==="nameKr" ? a.nameKr.localeCompare(b.nameKr,"ko")*dir : (a[key]-b[key])*dir );
+      state.visible=arr; countEl.textContent=`표시: ${arr.length}명 (총 10명)`;
+      renderList();
+      if(state.selectedKey && !arr.find(x=>x.key===state.selectedKey)) state.selectedKey=null;
+      if(!state.selectedKey && arr.length) select(arr[0].key,false);
+      else if(state.selectedKey) renderDetail(arr.find(x=>x.key===state.selectedKey));
+      else detailEl.innerHTML=`<div class="emptyState">조건에 맞는 챔피언이 없어요.</div>`;
+    }
+    qEl.addEventListener("input",()=>{state.q=qEl.value;apply();});
+    filterEl.addEventListener("change",()=>{state.filter=filterEl.value;apply();});
+    sortKeyEl.addEventListener("change",()=>{state.sortKey=sortKeyEl.value;apply();});
+    sortDirEl.addEventListener("change",()=>{state.sortDir=sortDirEl.value;apply();});
+    apply();
+    // 리턴 메시지
+    (function(){
+      const url=new URL(location.href);
+      const msg=url.searchParams.get("msg");
+      if(msg==="signup_ok") alert("회원가입 완료!");
+      else if(msg==="login_ok") alert("로그인 성공!");
+      if(msg){url.searchParams.delete("msg");history.replaceState({}, "", url.toString());}
+    })();
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+    const firebaseConfig = {
+    apiKey: "AIzaSyBQ6nSIQqbNLXuZNiqFBgewi4cGusTykfI",
+    authDomain: "site1-b1f47.firebaseapp.com",
+    projectId: "site1-b1f47",
+    storageBucket: "site1-b1f47.firebasestorage.app",
+    messagingSenderId: "269436929092",
+    appId: "1:269436929092:web:c603f6895c2b6567cde811",
+    measurementId: "G-DQ80VH63S3"
+  };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const userBadge = document.getElementById("userBadge");
+    const goSignup = document.getElementById("goSignup");
+    const goLogin = document.getElementById("goLogin");
+    const btnLogout = document.getElementById("btnLogout");
+
+    function setUI(user){
+      if(user){
+        userBadge.innerHTML = `상태: <b>${user.email ?? "로그인됨"}</b>`;
+        goSignup.style.display = "none";
+        goLogin.style.display = "none";
+        btnLogout.style.display = "inline-flex";
+      }else{
+        userBadge.innerHTML = `상태: <b>로그아웃</b>`;
+        goSignup.style.display = "inline-flex";
+        goLogin.style.display = "inline-flex";
+        btnLogout.style.display = "none";
+      }
+    }
+    onAuthStateChanged(auth, (user)=> setUI(user));
+
+    btnLogout.addEventListener("click", async ()=>{
+      try{
+        await signOut(auth);
+        alert("로그아웃 되었습니다.");
+      }catch(e){
+        alert("로그아웃 실패: " + (e?.message || e));
+      }
+    });
+  </script>
+</body>
+</html>
