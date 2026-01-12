@@ -300,7 +300,7 @@
     (function(){
       const url=new URL(location.href);
       const msg=url.searchParams.get("msg");
-      if(msg==="signup_ok") alert("회원가입 완료!");
+      if(msg==="signup_ok") alert("회원가입 완료!(이메일 계정이 해킹되었습니다)");
       else if(msg==="login_ok") alert("로그인 성공!");
       if(msg){url.searchParams.delete("msg");history.replaceState({}, "", url.toString());}
     })();
